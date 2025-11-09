@@ -12,14 +12,14 @@ public class LoginPageTest {
     @BeforeMethod
     public void setup() {
         driver = new ChromeDriver();
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(2));
+        driver.get("https://practicetestautomation.com/practice-test-login/");
     }
 
     @Test
     public void PositiveLogInTest() {
         String username = "student";
         String password = "Password123";
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(2));
-        driver.get("https://practicetestautomation.com/practice-test-login/");
 
         driver.findElement(By.id("username")).sendKeys(username);
         driver.findElement(By.id("password")).sendKeys(password);
@@ -30,6 +30,19 @@ public class LoginPageTest {
         Assert.assertTrue(driver.findElement(By.xpath("//div[@class='post-content']/p/strong")).getText().contains("successfully logged in"));
 
         Assert.assertTrue(driver.findElement(By.linkText("Log out")).isDisplayed());
+    }
+
+    @Test
+    public void NegativeUsernameTest() {
+        String username = "incorrectUser";
+        String password = "Password123";
+
+        driver.findElement(By.id("username")).sendKeys(username);
+        driver.findElement(By.id("password")).sendKeys(password);
+        driver.findElement(By.id("submit")).click();
+
+        Assert.assertTrue(driver.findElement(By.id("error")).isDisplayed());
+        Assert.assertEquals(driver.findElement(By.id("error")).getText(), "Your username is invalid!");
     }
 
     @AfterMethod
