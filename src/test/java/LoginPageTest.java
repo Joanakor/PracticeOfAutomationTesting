@@ -8,9 +8,13 @@ import java.time.Duration;
 
 public class LoginPageTest {
     WebDriver driver;
+    String correctPassword;
+    String correctUsername;
 
     @BeforeMethod
     public void setup() {
+        correctUsername = "student";
+        correctPassword = "Password123";
         driver = new ChromeDriver();
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(2));
         driver.get("https://practicetestautomation.com/practice-test-login/");
@@ -18,11 +22,9 @@ public class LoginPageTest {
 
     @Test(priority = 1)
     public void PositiveLogInTest() {
-        String username = "student";
-        String password = "Password123";
 
-        driver.findElement(By.id("username")).sendKeys(username);
-        driver.findElement(By.id("password")).sendKeys(password);
+        driver.findElement(By.id("username")).sendKeys(correctUsername);
+        driver.findElement(By.id("password")).sendKeys(correctPassword);
         driver.findElement(By.id("submit")).click();
 
         Assert.assertEquals(driver.getCurrentUrl(), "https://practicetestautomation.com/logged-in-successfully/");
@@ -35,14 +37,25 @@ public class LoginPageTest {
     @Test(priority = 2)
     public void NegativeUsernameTest() {
         String username = "incorrectUser";
-        String password = "Password123";
 
         driver.findElement(By.id("username")).sendKeys(username);
-        driver.findElement(By.id("password")).sendKeys(password);
+        driver.findElement(By.id("password")).sendKeys(correctPassword);
         driver.findElement(By.id("submit")).click();
 
         Assert.assertTrue(driver.findElement(By.id("error")).isDisplayed());
         Assert.assertEquals(driver.findElement(By.id("error")).getText(), "Your username is invalid!");
+    }
+
+    @Test(priority = 3)
+    public void NegativePasswordTest() {
+        String password = "incorrectPassword";
+
+        driver.findElement(By.id("username")).sendKeys(correctUsername);
+        driver.findElement(By.id("password")).sendKeys(password);
+        driver.findElement(By.id("submit")).click();
+
+        Assert.assertTrue(driver.findElement(By.id("error")).isDisplayed());
+        Assert.assertEquals(driver.findElement(By.id("error")).getText(), "Your password is invalid!");
     }
 
     @AfterMethod
