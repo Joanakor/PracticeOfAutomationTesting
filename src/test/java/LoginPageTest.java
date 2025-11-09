@@ -16,7 +16,7 @@ public class LoginPageTest {
         driver.get("https://practicetestautomation.com/practice-test-login/");
     }
 
-    @Test
+    @Test(priority = 1)
     public void PositiveLogInTest() {
         String username = "student";
         String password = "Password123";
@@ -32,7 +32,7 @@ public class LoginPageTest {
         Assert.assertTrue(driver.findElement(By.linkText("Log out")).isDisplayed());
     }
 
-    @Test
+    @Test(priority = 2)
     public void NegativeUsernameTest() {
         String username = "incorrectUser";
         String password = "Password123";
